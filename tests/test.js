@@ -76,7 +76,10 @@ describe('MinilogRollbar', function() {
     });
 
     it('should return without notifying if the level argument is lower than the errorThreshold', function() {
-      var spyEmit = spyOn(instance, 'emit');
+      var spyEmit = spyOn(instance, 'emit', function() {
+        var args = Array.prototype.slice.call(arguments);
+        expect(args).to.deep.equal(['item', 'name', 'info', ['message', { data: 1 }]])
+      });
       var spy = spyOn(instance.rollbar, 'info');
       instance.options.errorThreshold = MinilogRollbar.errorLevels.warn;
       instance.write('name', 'info', ['message', { data: 1 }]);
@@ -122,7 +125,10 @@ describe('MinilogRollbar', function() {
     });
 
     it('should emit when finished', function() {
-      var spy = spyOn(instance, 'emit');
+      var spy = spyOn(instance, 'emit', function() {
+        var args = Array.prototype.slice.call(arguments);
+        expect(args).to.deep.equal(['item', 'name', 'error', ['message', 'foo']])
+      });
       instance.write('name', 'error', [ 'message', new Error('foo') ]);
       expect(instance.emit).to.have.been.called.once;
       spy.restore();

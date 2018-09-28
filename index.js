@@ -67,7 +67,7 @@ MinilogRollbar.prototype.setup = function(options) {
 
 MinilogRollbar.prototype.write = function(name, level, args) {
   if (this.options.errorThreshold > MinilogRollbar.errorLevels[level]) {
-    this.emit(name, level, args); //pass-through
+    this.emit('item', name, level, args); //pass-through
     return;
   }
 
@@ -89,7 +89,7 @@ MinilogRollbar.prototype.write = function(name, level, args) {
     this.rollbar[level].call(this.rollbar, args[0], error, { component: name, data: JSON.stringify(args.slice(1)) });
   }
 
-  this.emit(name, level, args);
+  this.emit('item', name, level, args);
 };
 
 module.exports = exports = MinilogRollbar;
