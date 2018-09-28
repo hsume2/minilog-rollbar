@@ -71,7 +71,7 @@ MinilogRollbar.prototype.write = function(name, level, args) {
     return;
   }
 
-  var error, notification;
+  var error;
   for(var i = 0 ; i < args.length ; i++) {
     if(args[i] instanceof Error) {
       error = args.splice(i, 1, args[i].message)[0];
@@ -79,15 +79,13 @@ MinilogRollbar.prototype.write = function(name, level, args) {
     }
   }
 
-  if(error) {
-    this.rollbar[level].call(this.rollbar, args[0], error, { component: name, data: JSON.stringify(args.slice(1)) });
-  } else {
+  if(!error) {
     error = new Error();
     error.name = 'Trace';
     Error.captureStackTrace(error, arguments.callee);
-
-    this.rollbar[level].call(this.rollbar, args[0], error, { component: name, data: JSON.stringify(args.slice(1)) });
   }
+
+  this.rollbar[level].call(this.rollbar, args[0], error, { component: name, data: JSON.stringify(args.slice(1)) });
 
   this.emit('item', name, level, args);
 };
