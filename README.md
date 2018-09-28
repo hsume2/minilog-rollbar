@@ -10,8 +10,6 @@ enabled)
   - set the minimum threshold of Minilog events that will be sent to
 Rollbar
   - adjust the stack trace length
-  - allow Rollbar notification errors to be thrown and potentially halt
-current process
 
 ## Example
 
